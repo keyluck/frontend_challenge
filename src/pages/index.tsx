@@ -1,10 +1,16 @@
 import React from 'react';
 import Hero from "../components/Hero";
 
-export default function Home() {
+
+export function Home() {
+    let data 
     return (
         <div className="container flex items-center mx-auto justify-center p-2">
-            <Hero />
+            <Hero data={data}/>
         </div>
     )
 }
+
+
+  
+export default Home

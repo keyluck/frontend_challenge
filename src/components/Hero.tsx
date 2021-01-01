@@ -1,76 +1,82 @@
-import React, { Component } from 'react';
+import React, { useState} from 'react';
+
 
 import GetStarted from './GetStarted'
 import GetInfo from './GetInfo'
 import DisplayStarmap from './DisplayStarmap'
 
 
+interface HeroProps {
+    data: JSON
+}
 
-export class Hero extends Component {
+const defaultData = {
+    date: "",
+    city: "",
+    state: "",
+    msg: ""
+}
 
+const currentStep = 1
+
+export const Hero: React.FC<HeroProps> = ({ data }) => {
     //State for form control and star map variables
-    state = {
-        step: 1,
-        date: "",
-        city: "",
-        state: "",
-        msg: ""
-    }
+    const [ formData, setData ] = useState(defaultData)
+    const [ steps, setStep ] = useState(currentStep);
+
 
     // Next Step
-    nextStep = () => {
-        const {step} = this.state
-        this.setState({
-            step: step+1
-        })
+    const nextStep = () => {
+        setStep(steps => currentStep+1)
     }
 
     //Previous Step
-    prevStep = () => {
-        const { step } = this.state;
-        this.setState ({
-            step: step-1
-        });
+    const prevStep = () => {
+        setStep(steps=>steps - 1)
     }
 
-    //Handle input form for customizing star map
-    handleChange = input => e => {
-        this.setState ({[input]: e.target.value});
     
+    //Handle Form Submit
+    const handleFormSubmit = (input: string) => (
+                            e: { target: HTMLInputElement | 
+                                    HTMLTextAreaElement }) => {
+       setData({...formData, [input]: e.target.value})
+        
     }
 
+    const handleOnClick = () => {
 
-    render() {
-
-        const { step } = this.state
-        const { date, city, state, msg} = this.state
-        const values = {date, city, state, msg}
-        
-        // Switch to step through each component
-        switch (step) {
-            case 1: 
-                return <GetStarted 
-                            nextStep={this.nextStep} 
-                            handleChange={this.handleChange}
-                            values={values} />
-            case 2:
-                return <GetInfo
-                            prevStep={this.prevStep} 
-                            nextStep={this.nextStep} 
-                            handleChange={this.handleChange}
-                            values={values} />
-            case 3:
-                return <DisplayStarmap 
-                            prevStep={this.prevStep} 
-                            values={values} />
-            default:
-                throw new Error('Unknown step');
+        if( formData.date !== "" && 
+            formData.city!=="" && 
+            formData.state!=="") {
+                setStep(3)
+        }
+        else {
+            return ''
         }
         
-
-
     }
+    
+
+    const props = { formData, handleFormSubmit, handleOnClick, nextStep, prevStep}
+    // Switch to step through each component
+    switch (steps) {
+        case 1: 
+            return <GetStarted onClick={nextStep} />
+        case 2:
+            return <GetInfo formSubmit={handleFormSubmit} 
+                            backButton={prevStep}
+                            formOnClick={handleOnClick} />
+        case 3:
+            return <DisplayStarmap onClick={prevStep} starmap={data} />
+        default:
+            throw new Error('Unknown step');
+    }
+        
+
 
 }
+
+
 
 export default Hero
