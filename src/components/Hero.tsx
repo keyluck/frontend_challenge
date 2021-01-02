@@ -6,9 +6,7 @@ import GetInfo from './GetInfo'
 import DisplayStarmap from './DisplayStarmap'
 
 
-interface HeroProps {
-    data: JSON
-}
+
 
 const defaultData = {
     date: "",
@@ -19,7 +17,7 @@ const defaultData = {
 
 const currentStep = 1
 
-export const Hero: React.FC<HeroProps> = ({ data }) => {
+export const Hero = () => {
     //State for form control and star map variables
     const [ formData, setData ] = useState(defaultData)
     const [ steps, setStep ] = useState(currentStep);
@@ -68,7 +66,7 @@ export const Hero: React.FC<HeroProps> = ({ data }) => {
                             backButton={prevStep}
                             formOnClick={handleOnClick} />
         case 3:
-            return <DisplayStarmap onClick={prevStep} starmap={data} />
+            return <DisplayStarmap onClick={prevStep} />
         default:
             throw new Error('Unknown step');
     }

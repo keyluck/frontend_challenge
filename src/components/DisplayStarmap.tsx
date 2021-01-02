@@ -5,12 +5,11 @@ import Image from 'next/image'
 
 interface Props {
     onClick: () => void;
-    starmap: JSON
 }
 
 
 
-export const DisplayStarmap: React.FC<Props> = ({ onClick, starmap }) => {
+export const DisplayStarmap: React.FC<Props> = ({ onClick }) => {
 
     return (
         <div className="shadow-2xl">
